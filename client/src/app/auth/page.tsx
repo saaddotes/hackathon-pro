@@ -43,7 +43,14 @@ export default function Auth() {
 
   return (
     <div className="flex-1 bg-slate-400 flex justify-center items-center">
-      <div className="p-10 rounded-2xl space-y-4 bg-slate-100 flex flex-col items-center shadow-lg shadow-white">
+      <motion.div
+        className="p-10 rounded-2xl space-y-4 bg-slate-100 flex flex-col items-center shadow-lg shadow-white"
+        key={isLogin ? "loginText" : "signupText"}
+        initial={{ opacity: 0, x: isLogin ? -50 : 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: isLogin ? 50 : -50 }}
+        transition={{ duration: 0.5 }}
+      >
         <motion.h1
           key={isLogin ? "loginText" : "signupText"}
           initial={{ opacity: 0, x: isLogin ? -50 : 50 }}
@@ -54,9 +61,16 @@ export default function Auth() {
         >
           {isLogin ? "Login Form" : "Signup Form"}
         </motion.h1>
-        <div className="flex justify-between items-center border-slate-700 border-[1px] rounded-lg overflow-hidden">
+        <motion.div
+          key={isLogin ? "loginText" : "signupText"}
+          initial={{ opacity: 0, x: isLogin ? -50 : 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: isLogin ? 50 : -50 }}
+          transition={{ duration: 0.5 }}
+          className="flex justify-between items-center border-slate-700 border-[1px] rounded-lg overflow-hidden"
+        >
           <button
-            className={`btn btn-ghost w-32 hover:bg-slate-50 transition-all duration-100 h-10  ${
+            className={`btn btn-ghost w-32 hover:bg-slate-50 transition-all duration-100 ${
               isLogin ? "!btn-active" : ""
             }`}
             onClick={() => setIsLogin(true)}
@@ -64,14 +78,14 @@ export default function Auth() {
             Login
           </button>
           <button
-            className={`btn btn-ghost w-32 hover:bg-slate-50 transition-all duration-100 h-10 ${
+            className={`btn btn-ghost w-32 hover:bg-slate-50 transition-all duration-100 ${
               !isLogin ? "!btn-active" : ""
             }`}
             onClick={() => setIsLogin(false)}
           >
             Sign up
           </button>
-        </div>
+        </motion.div>
         <motion.form
           key={isLogin ? "login" : "signup"}
           initial={{ opacity: 0, x: isLogin ? -50 : 50 }}
@@ -192,7 +206,7 @@ export default function Auth() {
             {isLogin ? "Login" : "Signup"}
           </button>
         </motion.form>
-      </div>
+      </motion.div>
     </div>
   );
 }
