@@ -1,6 +1,7 @@
 "use client";
 import { useAuth } from "@/context/auth-context";
 import { motion } from "framer-motion";
+import { CldUploadWidget } from "next-cloudinary";
 import { useRouter } from "next/navigation";
 import React, { FormEvent, useEffect, useState } from "react";
 
@@ -13,6 +14,7 @@ export default function Auth() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [imageSrc, setImgSrc] = useState(null);
 
   const router = useRouter();
 
@@ -39,20 +41,27 @@ export default function Auth() {
     setIsOpen(false);
   }, [isLogin]);
 
+  const handleUpload = (result: any) => {
+    if (result) {
+      console.log(result.info.secure_url);
+      setImgSrc(result.info.secure_url);
+    }
+  };
+
   if (loading) return <span className="loading loading-ring loading-xs"></span>;
 
   return (
     <div className="flex-1 bg-slate-400 flex justify-center items-center">
       <motion.div
         className="p-10 rounded-2xl space-y-4 bg-slate-100 flex flex-col items-center shadow-lg shadow-white"
-        key={isLogin ? "loginText" : "signupText"}
+        key={isLogin ? "loginText-1" : "signupText-1"}
         initial={{ opacity: 0, x: isLogin ? -50 : 50 }}
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: isLogin ? 50 : -50 }}
         transition={{ duration: 0.5 }}
       >
         <motion.h1
-          key={isLogin ? "loginText" : "signupText"}
+          key={isLogin ? "loginText-2" : "signupText-2"}
           initial={{ opacity: 0, x: isLogin ? -50 : 50 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: isLogin ? 50 : -50 }}
@@ -96,24 +105,44 @@ export default function Auth() {
           onSubmit={handleAuth}
         >
           {!isLogin && (
-            <label className="input input-bordered flex items-center gap-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 16 16"
-                fill="currentColor"
-                className="h-4 w-4 opacity-70"
+            <>
+              <label className="input input-bordered flex items-center gap-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 16 16"
+                  fill="currentColor"
+                  className="h-4 w-4 opacity-70"
+                >
+                  <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
+                </svg>
+                <input
+                  type="text"
+                  className="grow"
+                  placeholder="Username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
+                />
+              </label>
+              {/* <CldUploadWidget
+                uploadPreset="hackathon"
+                onSuccess={handleUpload}
+                options={{
+                  sources: ["local", "url", "unsplash"],
+                  multiple: false,
+                  maxFiles: 1,
+                }}
               >
-                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
-              </svg>
-              <input
-                type="text"
-                className="grow"
-                placeholder="Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-              />
-            </label>
+                {({ open }) => {
+                  return (
+                    <button className="btn btn-sm" onClick={() => open()}>
+                      Upload Image
+                    </button>
+                  );
+                }}
+              </CldUploadWidget>
+              {imageSrc && <img src={imageSrc} alt="tessty" />} */}
+            </>
           )}
           <label className="input input-bordered flex items-center gap-2">
             <svg
