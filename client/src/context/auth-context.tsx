@@ -50,10 +50,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  async function auth(url: string, data: any) {
-    console.log("url => ", url, data);
+  async function auth(
+    url: string,
+    data: { username?: string; email: string; password: string }
+  ) {
+    console.log("url => ", process.env.NEXT_PUBLIC_BACKEND_URL, url, data);
     try {
-      const res = await axios.post(url, data);
+      const res = await axios.post(
+        process.env.NEXT_PUBLIC_BACKEND_URL + url,
+        data
+      );
       console.log("res=>", res.data);
       toast.success(res.data.message);
       sessionStorage.setItem("user", JSON.stringify(res.data.data));

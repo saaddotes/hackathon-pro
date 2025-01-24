@@ -1,7 +1,6 @@
 "use client";
 import { useAuth } from "@/context/auth-context";
 import { motion } from "framer-motion";
-import { CldUploadWidget } from "next-cloudinary";
 import { useRouter } from "next/navigation";
 import React, { FormEvent, useEffect, useState } from "react";
 
@@ -14,7 +13,7 @@ export default function Auth() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const [imageSrc, setImgSrc] = useState(null);
+  // const [imageSrc, setImgSrc] = useState(null);
 
   const router = useRouter();
 
@@ -28,25 +27,23 @@ export default function Auth() {
 
   async function handleAuth(e: FormEvent) {
     e.preventDefault();
-    const url = isLogin
-      ? "http://localhost:4000/auth/login"
-      : "http://localhost:4000/auth/signup";
+    const url = isLogin ? "/auth/login" : "/auth/signup";
 
     auth(url, isLogin ? { email, password } : { username, email, password });
   }
 
   useEffect(() => {
-    sessionStorage.clear;
+    sessionStorage.clear();
     setPassword("");
     setIsOpen(false);
   }, [isLogin]);
 
-  const handleUpload = (result: any) => {
-    if (result) {
-      console.log(result.info.secure_url);
-      setImgSrc(result.info.secure_url);
-    }
-  };
+  // const handleUpload = (result: any) => {
+  //   if (result) {
+  //     console.log(result.info.secure_url);
+  //     setImgSrc(result.info.secure_url);
+  //   }
+  // };
 
   if (loading) return <span className="loading loading-ring loading-xs"></span>;
 
