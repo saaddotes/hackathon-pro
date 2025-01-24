@@ -16,8 +16,13 @@ mongoose
 const app = express();
 
 app.use(express.json());
-app.use(cors("*"));
+const corsOptions = {
+  origin: ["https://hackathon-front-pink.vercel.app"],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true,
+};
 
+app.use(cors(corsOptions));
 app.use("/auth", auth);
 
 app.listen(process.env.PORT, () => {
