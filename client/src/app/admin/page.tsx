@@ -6,7 +6,6 @@ import axios from "axios";
 import AdminLoginForm from "@/components/AdminLoginForm";
 import AdminDashboard from "@/components/AdminDashboard";
 
-// Main Admin component
 export default function Admin() {
   const { admin, adminAuth, loading } = useAuth();
   const [email, setEmail] = useState("");
@@ -16,7 +15,6 @@ export default function Admin() {
   const [loadingRequests, setLoadingRequests] = useState<boolean>(false);
   const [modalData, setModalData] = useState<any | null>(null);
 
-  // Handle admin login form submission
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -35,7 +33,6 @@ export default function Admin() {
     }
   };
 
-  // Fetch loan requests on component mount (only if admin is logged in)
   useEffect(() => {
     if (admin) {
       const fetchLoanRequests = async () => {

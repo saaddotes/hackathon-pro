@@ -191,11 +191,11 @@ app.post("/user-loan", async (req, res) => {
 });
 
 app.get("/user-loan-request", async (req, res) => {
-  const { userId } = req.query; // Getting the userId from query parameters
+  const { email } = req.query; // Getting the userId from query parameters
 
   try {
     // Find all loan requests associated with the userId
-    const loanRequests = await LoanRequest.find({ userId });
+    const loanRequests = await LoanRequest.find({ email });
 
     if (!loanRequests || loanRequests.length === 0) {
       return res.status(404).json({

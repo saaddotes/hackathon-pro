@@ -1,19 +1,14 @@
 "use client";
 import { useAuth } from "@/context/auth-context";
-import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import React, { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
 export default function Auth() {
   const [loading, setLoading] = useState(true);
   const { auth, user } = useAuth();
-
-  const [isLogin, setIsLogin] = useState(true);
-  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  // const [imageSrc, setImgSrc] = useState(null);
 
   const router = useRouter();
 
@@ -27,103 +22,19 @@ export default function Auth() {
 
   async function handleAuth(e: FormEvent) {
     e.preventDefault();
-    const url = isLogin ? "/auth/loginloan" : "/auth/signup";
+    const url = "/auth/loginloan";
 
-    auth(url, isLogin ? { email, password } : { username, email, password });
+    auth(url, { email, password });
   }
-
-  useEffect(() => {
-    sessionStorage.clear();
-    setPassword("");
-    setIsOpen(false);
-  }, [isLogin]);
-
-  // const handleUpload = (result: any) => {
-  //   if (result) {
-  //     console.log(result.info.secure_url);
-  //     setImgSrc(result.info.secure_url);
-  //   }
-  // };
 
   if (loading) return <span className="loading loading-ring loading-xs"></span>;
 
   return (
     <div className="flex-1 bg-slate-400 flex justify-center items-center">
-      <motion.div
-        className="p-10 rounded-2xl space-y-4 bg-slate-100 flex flex-col items-center shadow-lg shadow-white"
-        key={isLogin ? "loginForm" : "signupForm"}
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: 20 }}
-        transition={{ duration: 0.4 }}
-      >
-        <h1 className="text-3xl">{isLogin ? "Login Form" : "Signup Form"}</h1>
-
-        <div className="flex justify-between items-center border border-slate-700 rounded-lg overflow-hidden bg-slate-100 shadow-md">
-          <button
-            className={`w-36 py-2 font-medium text-lg transition-all duration-300 ${
-              isLogin
-                ? "bg-slate-800 text-white shadow-md"
-                : "hover:bg-slate-200 text-slate-700"
-            } rounded-l-lg`}
-            onClick={() => setIsLogin(true)}
-          >
-            Login
-          </button>
-          <button
-            className={`w-36 py-2 font-medium text-lg transition-all duration-300 ${
-              !isLogin
-                ? "bg-slate-800 text-white shadow-md"
-                : "hover:bg-slate-200 text-slate-700"
-            } rounded-r-lg`}
-            onClick={() => setIsLogin(false)}
-          >
-            Sign up
-          </button>
-        </div>
+      <div className="p-10 rounded-2xl space-y-4 bg-slate-100 flex flex-col items-center shadow-lg shadow-white">
+        <h1 className="text-3xl">Login Form</h1>
 
         <form className="space-y-3" onSubmit={handleAuth}>
-          {!isLogin && (
-            <>
-              <label className="input input-bordered flex items-center gap-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 16 16"
-                  fill="currentColor"
-                  className="h-4 w-4 opacity-70"
-                >
-                  <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
-                </svg>
-                <input
-                  type="text"
-                  className="grow"
-                  placeholder="Username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  required
-                />
-              </label>
-              {/* <CldUploadWidget
-                uploadPreset="hackathon"
-                onSuccess={handleUpload}
-                options={{
-                  sources: ["local", "url", "unsplash"],
-                  multiple: false,
-                  maxFiles: 1,
-                }}
-              >
-                {({ open }) => {
-                  return (
-                    <button className="btn btn-sm" onClick={() => open()}>
-                      Upload Image
-                    </button>
-                  );
-                }}
-              </CldUploadWidget>
-              {imageSrc && <img src={imageSrc} alt="tessty" />} */}
-            </>
-          )}
-
           <label className="input input-bordered flex items-center gap-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -216,10 +127,10 @@ export default function Auth() {
             className="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
             type="submit"
           >
-            {isLogin ? "Login" : "Sign up"}
+            {"Login"}
           </button>
         </form>
-      </motion.div>
+      </div>
     </div>
   );
 }
