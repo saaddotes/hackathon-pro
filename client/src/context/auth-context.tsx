@@ -34,6 +34,7 @@ interface AuthContextType {
     data: { email: string; password: string }
   ) => Promise<void>; // Add adminAuth function type
   logout: () => void;
+  setUser: any;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -143,7 +144,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, admin, loading, auth, adminAuth, logout }}
+      value={{ user, admin, loading, auth, adminAuth, logout, setUser }}
     >
       {children}
     </AuthContext.Provider>

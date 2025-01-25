@@ -91,30 +91,18 @@ app.post("/register", async (req, res) => {
   }
 });
 
-app.post("/update-password", async (req, res) => {
+app.put("/update-password", async (req, res) => {
   try {
-    const { email, currentPassword, newPassword } = req.body;
+    const { email, newPassword } = req.body;
 
     const user = await LoanUser.findOne({ email });
     if (!user) {
       return res.status(404).json({ error: "User not found." });
     }
 
-    // Validate the current password
-    // const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
-    if (password !== user.password) {
-      return res.status(400).json({ error: "Current password is incorrect." });
-    }
-
-    // Hash the new password
-    // const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-    // Update the user's password in the database
     user.password = newPassword;
     user.isNew = false;
     await user.save();
-
-    // Respond with success
     res.status(200).json({ message: "Password updated successfully!" });
   } catch (error) {
     console.error(error);
@@ -142,7 +130,6 @@ app.post("/loginloan", checkCredentials, async (req, res) => {
         .json({ success: false, message: "Incorrect Password" });
     }
     const safeUser = user.toObject();
-    delete safeUser.password;
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
@@ -232,13 +219,13 @@ app.get("/user-loan-request", async (req, res) => {
 
     if (!loanRequests || loanRequests.length === 0) {
       return res.status(404).json({
-        success: false,
+        success: true,
         message: "No loan requests found for this user.",
       });
     }
 
     res.status(200).json({
-      success: true,
+      success: false,
       message: "Loan requests fetched successfully",
       data: loanRequests,
     });
