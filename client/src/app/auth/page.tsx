@@ -19,7 +19,7 @@ export default function Auth() {
 
   useEffect(() => {
     if (user) {
-      router.push("/admin");
+      router.push("/loanuser");
     } else {
       setLoading(false);
     }
@@ -27,7 +27,7 @@ export default function Auth() {
 
   async function handleAuth(e: FormEvent) {
     e.preventDefault();
-    const url = isLogin ? "/auth/login" : "/auth/signup";
+    const url = isLogin ? "/auth/loginloan" : "/auth/signup";
 
     auth(url, isLogin ? { email, password } : { username, email, password });
   }
@@ -51,56 +51,38 @@ export default function Auth() {
     <div className="flex-1 bg-slate-400 flex justify-center items-center">
       <motion.div
         className="p-10 rounded-2xl space-y-4 bg-slate-100 flex flex-col items-center shadow-lg shadow-white"
-        key={isLogin ? "loginText-1" : "signupText-1"}
-        initial={{ opacity: 0, x: isLogin ? -50 : 50 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: isLogin ? 50 : -50 }}
-        transition={{ duration: 0.5 }}
+        key={isLogin ? "loginForm" : "signupForm"}
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 20 }}
+        transition={{ duration: 0.4 }}
       >
-        <motion.h1
-          key={isLogin ? "loginText-2" : "signupText-2"}
-          initial={{ opacity: 0, x: isLogin ? -50 : 50 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: isLogin ? 50 : -50 }}
-          transition={{ duration: 0.5 }}
-          className=" text-3xl"
-        >
-          {isLogin ? "Login Form" : "Signup Form"}
-        </motion.h1>
-        <motion.div
-          key={isLogin ? "loginText" : "signupText"}
-          initial={{ opacity: 0, x: isLogin ? -50 : 50 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: isLogin ? 50 : -50 }}
-          transition={{ duration: 0.5 }}
-          className="flex justify-between items-center border-slate-700 border-[1px] rounded-lg overflow-hidden"
-        >
+        <h1 className="text-3xl">{isLogin ? "Login Form" : "Signup Form"}</h1>
+
+        <div className="flex justify-between items-center border border-slate-700 rounded-lg overflow-hidden bg-slate-100 shadow-md">
           <button
-            className={`btn btn-ghost w-32 hover:bg-slate-50 transition-all duration-100 ${
-              isLogin ? "!btn-active" : ""
-            }`}
+            className={`w-36 py-2 font-medium text-lg transition-all duration-300 ${
+              isLogin
+                ? "bg-slate-800 text-white shadow-md"
+                : "hover:bg-slate-200 text-slate-700"
+            } rounded-l-lg`}
             onClick={() => setIsLogin(true)}
           >
             Login
           </button>
           <button
-            className={`btn btn-ghost w-32 hover:bg-slate-50 transition-all duration-100 ${
-              !isLogin ? "!btn-active" : ""
-            }`}
+            className={`w-36 py-2 font-medium text-lg transition-all duration-300 ${
+              !isLogin
+                ? "bg-slate-800 text-white shadow-md"
+                : "hover:bg-slate-200 text-slate-700"
+            } rounded-r-lg`}
             onClick={() => setIsLogin(false)}
           >
             Sign up
           </button>
-        </motion.div>
-        <motion.form
-          key={isLogin ? "login" : "signup"}
-          initial={{ opacity: 0, x: isLogin ? -50 : 50 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: isLogin ? 50 : -50 }}
-          transition={{ duration: 0.5 }}
-          className="space-y-3"
-          onSubmit={handleAuth}
-        >
+        </div>
+
+        <form className="space-y-3" onSubmit={handleAuth}>
           {!isLogin && (
             <>
               <label className="input input-bordered flex items-center gap-2">
@@ -141,6 +123,7 @@ export default function Auth() {
               {imageSrc && <img src={imageSrc} alt="tessty" />} */}
             </>
           )}
+
           <label className="input input-bordered flex items-center gap-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -228,10 +211,14 @@ export default function Auth() {
               )}
             </button>
           </label>
-          <button type="submit" className="btn btn-primary w-full">
-            {isLogin ? "Login" : "Signup"}
+
+          <button
+            className="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
+            type="submit"
+          >
+            {isLogin ? "Login" : "Sign up"}
           </button>
-        </motion.form>
+        </form>
       </motion.div>
     </div>
   );

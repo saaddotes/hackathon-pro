@@ -23,10 +23,16 @@ export type User = {
 
 interface AuthContextType {
   user: User | null;
+  admin: User | null; // Add admin state
+  loading: boolean;
   auth: (
     url: string,
     data: { username?: string; email: string; password: string }
   ) => Promise<void>;
+  adminAuth: (
+    url: string,
+    data: { email: string; password: string }
+  ) => Promise<void>; // Add adminAuth function type
   logout: () => void;
 }
 
@@ -34,11 +40,13 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [admin, setAdmin] = useState<User | null>(null); // Initialize admin state
+  const [loading, setLoading] = useState<boolean>(true); // Add loading state
 
   useEffect(() => {
-    // const token = sessionStorage.getItem("authToken");
-    const token = "123456";
+    const token = "123456"; // Simulated token
     const storedUser = sessionStorage.getItem("user");
+    const storedAdmin = localStorage.getItem("admin"); // Fetch admin from localStorage
 
     if (token && storedUser) {
       try {
@@ -48,6 +56,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         console.error("Failed to parse user data from sessionStorage:", error);
       }
     }
+
+    if (storedAdmin) {
+      try {
+        const parsedAdmin = JSON.parse(storedAdmin) as User;
+        setAdmin(parsedAdmin);
+      } catch (error) {
+        console.error("Failed to parse admin data from localStorage:", error);
+      }
+    }
+
+    // Set loading to false after checking token and storedUser
+    setLoading(false);
   }, []);
 
   async function auth(
@@ -55,12 +75,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     data: { username?: string; email: string; password: string }
   ) {
     console.log("url => ", process.env.NEXT_PUBLIC_BACKEND_URL, url, data);
+    setLoading(true); // Set loading to true during auth process
     try {
       const res = await axios.post(
         process.env.NEXT_PUBLIC_BACKEND_URL + url,
         data
       );
-      console.log("res=>", res.data);
+      console.log("res=>", res);
       toast.success(res.data.message);
       sessionStorage.setItem("user", JSON.stringify(res.data.data));
       setUser(res.data.data);
@@ -71,18 +92,59 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else {
         console.log("Error => ", error);
       }
+    } finally {
+      setLoading(false); // Ensure loading is false after auth process
+    }
+  }
+
+  // Admin login function
+  async function adminAuth(
+    url: string,
+    data: { email: string; password: string }
+  ) {
+    console.log(
+      "Admin URL => ",
+      process.env.NEXT_PUBLIC_BACKEND_URL,
+      url,
+      data
+    );
+    setLoading(true); // Set loading to true during admin login
+    try {
+      const res = await axios.post(
+        process.env.NEXT_PUBLIC_BACKEND_URL + url,
+        data
+      );
+      console.log("Admin res=>", res);
+      toast.success(res.data.message);
+      localStorage.setItem("admin", JSON.stringify(res.data.data)); // Store admin data in localStorage
+      setAdmin(res.data.data); // Set admin state
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log("Error => ", error?.response?.data);
+        toast.error(error?.response?.data?.message);
+      } else {
+        console.log("Error => ", error);
+      }
+    } finally {
+      setLoading(false); // Ensure loading is false after admin login
     }
   }
 
   const logout = useCallback(() => {
+    setLoading(true); // Set loading to true during logout
     sessionStorage.removeItem("authToken");
     sessionStorage.removeItem("user");
+    localStorage.removeItem("admin"); // Remove admin from localStorage
     setUser(null);
+    setAdmin(null); // Reset admin state on logout
     toast.success("You have been successfully logged out.");
+    setLoading(false); // Set loading to false after logout
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, auth, logout }}>
+    <AuthContext.Provider
+      value={{ user, admin, loading, auth, adminAuth, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
