@@ -91,6 +91,39 @@ app.post("/register", async (req, res) => {
   }
 });
 
+app.post("/update-password", async (req, res) => {
+  try {
+    const { email, currentPassword, newPassword } = req.body;
+
+    const user = await LoanUser.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    // Validate the current password
+    // const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
+    if (password !== user.password) {
+      return res.status(400).json({ error: "Current password is incorrect." });
+    }
+
+    // Hash the new password
+    // const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update the user's password in the database
+    user.password = newPassword;
+    user.isNew = false;
+    await user.save();
+
+    // Respond with success
+    res.status(200).json({ message: "Password updated successfully!" });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while updating the password." });
+  }
+});
+
 app.post("/loginloan", checkCredentials, async (req, res) => {
   const { email, password } = req.body;
 

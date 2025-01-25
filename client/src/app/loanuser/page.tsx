@@ -43,6 +43,11 @@ export default function LoanUser() {
       router.push("/auth");
     }
 
+    if (user.isNew) {
+      let newpasword = prompt("Enter new Password !", user?.password);
+      console.log("newpassword : ", newpasword);
+    }
+
     if (user?._id) {
       fetchLoanRequests();
     }

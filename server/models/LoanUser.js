@@ -3,6 +3,7 @@ const loanUserSchema = new mongoose.Schema({
   name: { type: String, required: true },
   cnic: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
+  isNew: { type: Boolean, required: true, default: true },
   password: { type: String, required: true },
   selectedLoan: {
     category: { type: String, required: true },
