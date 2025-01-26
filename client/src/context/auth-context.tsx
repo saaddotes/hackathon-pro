@@ -86,7 +86,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  // Admin login function
   async function adminAuth(
     url: string,
     data: { email: string; password: string }
