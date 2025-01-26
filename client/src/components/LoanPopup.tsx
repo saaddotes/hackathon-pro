@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
@@ -12,6 +13,8 @@ export default function LoanPopup({ category, onClose }: any) {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("tempPassword123");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const calculateLoan = () => {
     const maxLoanAmount =
@@ -25,6 +28,7 @@ export default function LoanPopup({ category, onClose }: any) {
   };
 
   const handleSubmit = async () => {
+    setLoading(true);
     try {
       setPassword(Math.random().toString(36).slice(-8));
       const selectedLoan = {
@@ -48,17 +52,20 @@ export default function LoanPopup({ category, onClose }: any) {
 
       if (response.status === 200) {
         toast.success("Registration successful, check your email!");
+        setLoading(false);
         onClose();
+        router.push("/auth");
       }
     } catch (error) {
       console.error("Error during registration:", error);
       toast.error("Registration failed. Please try again.");
+      setLoading(false);
     }
   };
 
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md">
+      <div className="bg-white rounded-lg p-6 w-full max-w-md relative">
         <h2 className="text-xl font-bold mb-4">{category.name}</h2>
 
         <div className="space-y-4">
@@ -109,8 +116,19 @@ export default function LoanPopup({ category, onClose }: any) {
               </div>
 
               <button
-                className="bg-blue-500 text-white rounded-lg px-4 py-2 mt-4"
+                className={`bg-blue-500 text-white rounded-lg px-4 py-2 mt-4 ${
+                  selectedSubcategory === "" ||
+                  initialDeposit === 0 ||
+                  loanPeriod === 0
+                    ? "btn btn-disabled"
+                    : ""
+                } `}
                 onClick={calculateLoan}
+                disabled={
+                  selectedSubcategory === "" ||
+                  initialDeposit === 0 ||
+                  loanPeriod === 0
+                }
               >
                 Calculate Loan
               </button>
@@ -172,10 +190,12 @@ export default function LoanPopup({ category, onClose }: any) {
               </div>
 
               <button
-                className="bg-blue-500 text-white rounded-lg px-4 py-2 mt-4"
+                className={`bg-blue-500 text-white rounded-lg px-4 py-2 mt-4 ${
+                  loading ? " btn btn-disabled " : ""
+                }`}
                 onClick={handleSubmit}
               >
-                Register and Send Email
+                {loading ? "Loading" : "Register and Send Email"}
               </button>
             </>
           )}

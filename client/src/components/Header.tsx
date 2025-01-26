@@ -11,8 +11,10 @@ export default function Header() {
   const { user, logout } = useAuth();
   const pathname = usePathname();
   return (
-    <div className="bg-slate-300 shadow-2xl shadow-violet-400 flex justify-between items-center px-10 py-5">
-      <h1 className="text-2xl font-semibold text-slate-700">Hackathon</h1>
+    <div className="bg-slate-300 shadow-md shadow-violet-400 flex justify-between items-center px-10 py-5">
+      <h1 className="text-2xl font-semibold text-slate-700">
+        Saylani Microfinance
+      </h1>
       {user ? (
         <button
           className="btn btn-error bg-red-400 text-white"
