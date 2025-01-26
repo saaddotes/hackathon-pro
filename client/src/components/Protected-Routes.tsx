@@ -9,7 +9,7 @@ export default function ProtectedRoute({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const { user, loading } = useAuth(); // Assuming your auth context has a `loading` state
+  const { user, loading } = useAuth();
 
   useEffect(() => {
     if (!user && !loading) {
@@ -17,12 +17,10 @@ export default function ProtectedRoute({
     }
   }, [user, loading]);
 
-  // Show a loading indicator while waiting for user authentication status
   if (loading) {
     return <span className="loading loading-ring loading-xs"></span>;
   }
 
-  // Block rendering until the user is verified or redirected
   if (!user) return null;
 
   return <>{children}</>;

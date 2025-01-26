@@ -1,4 +1,3 @@
-// Admin login form component
 export default function AdminLoginForm({
   handleLogin,
   error,

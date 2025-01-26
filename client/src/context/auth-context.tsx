@@ -23,7 +23,7 @@ export type User = {
 
 interface AuthContextType {
   user: any | null;
-  admin: boolean;
+  admin: boolean | string;
   loading: boolean;
   auth: (
     url: string,
@@ -41,17 +41,18 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [admin, setAdmin] = useState<boolean>(false); // Initialize admin state
-  const [loading, setLoading] = useState<boolean>(true); // Add loading state
+  const [admin, setAdmin] = useState<boolean | string>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const token = "123456"; // Simulated token
     const storedUser = sessionStorage.getItem("user");
+    const storedAdmin = sessionStorage.getItem("admin");
 
-    if (token && storedUser) {
+    if (storedUser) {
       try {
         const parsedUser = JSON.parse(storedUser) as User;
         setUser(parsedUser);
+        setAdmin(storedAdmin);
       } catch (error) {
         console.error("Failed to parse user data from sessionStorage:", error);
       }
@@ -64,7 +65,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     url: string,
     data: { username?: string; email: string; password: string }
   ) {
-    setLoading(true); // Set loading to true during auth process
+    setLoading(true);
     try {
       const res = await axios.post(
         process.env.NEXT_PUBLIC_BACKEND_URL + url,
@@ -82,7 +83,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         console.log("Error => ", error);
       }
     } finally {
-      setLoading(false); // Ensure loading is false after auth process
+      setLoading(false);
     }
   }
 
@@ -97,7 +98,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         data
       );
       toast.success(res.data.message);
-      localStorage.setItem("user", JSON.stringify(res.data.data));
+      sessionStorage.setItem("user", JSON.stringify(res.data.data));
+      sessionStorage.setItem("admin", "true");
       setUser(res.data.data);
       setAdmin(true);
     } catch (error) {
@@ -108,18 +110,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         console.log("Error => ", error);
       }
     } finally {
-      setLoading(false); // Ensure loading is false after admin login
+      setLoading(false);
     }
   }
 
   const logout = useCallback(() => {
-    setLoading(true); // Set loading to true during logout
+    setLoading(true);
     sessionStorage.removeItem("authToken");
     sessionStorage.removeItem("user");
     setUser(null);
-    setAdmin(false); // Reset admin state on logout
+    setAdmin(false);
     toast.success("You have been successfully logged out.");
-    setLoading(false); // Set loading to false after logout
+    setLoading(false);
   }, []);
 
   return (

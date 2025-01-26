@@ -1,4 +1,4 @@
-const CustomAlert = ({
+function CustomAlert({
   message,
   onConfirm,
   onCancel,
@@ -6,7 +6,7 @@ const CustomAlert = ({
   message: string;
   onConfirm: () => void;
   onCancel: () => void;
-}) => {
+}) {
   return (
     <div
       role="alert"
@@ -38,6 +38,6 @@ const CustomAlert = ({
       </div>
     </div>
   );
-};
+}
 
 export default CustomAlert;

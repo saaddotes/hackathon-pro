@@ -33,20 +33,17 @@ app.post("/register", async (req, res) => {
       },
     });
 
-    // Email options
     const mailOptions = {
-      from: process.env.USER, // Sender email
-      to: email, // Recipient email
+      from: process.env.USER,
+      to: email,
       subject: "Account Creation",
-      text: emailText, // Plain text version of the email
-      html: emailHtml, // HTML version of the email
+      text: emailText,
+      html: emailHtml,
     };
 
-    // Send the email
     const info = await transporter.sendMail(mailOptions);
     console.log("Email sent:", info.response);
 
-    // Send response back to the client
     res
       .status(200)
       .json({ message: "User registered and email sent successfully!" });
@@ -76,7 +73,6 @@ app.post("/loginloan", checkCredentials, async (req, res) => {
         .json({ success: false, message: "No User Exists" });
     }
 
-    // const result = await bcrypt.compare(password, user.password);
     if (password !== user.password) {
       return res
         .status(400)
@@ -132,10 +128,9 @@ app.put("/update-password", async (req, res) => {
 });
 
 app.get("/user-loan-request", async (req, res) => {
-  const { userId } = req.query; // Getting the userId from query parameters
+  const { userId } = req.query;
 
   try {
-    // Find all loan requests associated with the userId
     const loanRequests = await LoanRequest.find({ userId });
 
     if (!loanRequests || loanRequests.length === 0) {
@@ -171,21 +166,19 @@ app.put("/user-loan", async (req, res) => {
         .json({ success: false, error: "Loan request not found" });
     }
 
-    // Update the loan request fields if they are provided in the request body
     if (guarantors) {
-      loanRequest.guarantors = guarantors; // Update guarantors if provided
+      loanRequest.guarantors = guarantors;
     }
     if (personalInfo) {
-      loanRequest.personalInfo = personalInfo; // Update personalInfo if provided
+      loanRequest.personalInfo = personalInfo;
     }
     if (status) {
-      loanRequest.status = status; // Update status if provided
+      loanRequest.status = status;
     }
     if (selectedLoan) {
-      loanRequest.selectedLoan = selectedLoan; // Update selectedLoan if provided
+      loanRequest.selectedLoan = selectedLoan;
     }
 
-    // Save the updated loan request to the database
     await loanRequest.save();
 
     res
@@ -201,7 +194,6 @@ app.put("/user-loan", async (req, res) => {
 
 app.get("/loanrequests", async (req, res) => {
   try {
-    // Fetch all loan requests from the LoanRequest model
     const loanRequests = await LoanRequest.find().populate(
       "userId",
       "name email cnic"
@@ -223,10 +215,9 @@ app.get("/loanrequests", async (req, res) => {
 });
 
 app.post("/approveloan", async (req, res) => {
-  const { loanId, scheduleDetails } = req.body; // Assuming loanId and scheduleDetails are passed in the request body
+  const { loanId, scheduleDetails } = req.body;
 
   try {
-    // Find the loan by loanId
     const loan = await LoanRequest.findById(loanId);
 
     if (!loan) {
@@ -236,20 +227,16 @@ app.post("/approveloan", async (req, res) => {
       });
     }
 
-    // Update the loan status to approved
     loan.status = "approved";
 
-    // Assuming scheduleDetails is an array of scheduled payment dates/amounts
-    // For example: [{ amount: 1000, dueDate: '2025-02-01' }, ...]
-    loan.schedule = scheduleDetails; // Add schedule to loan object
+    loan.schedule = scheduleDetails;
 
-    // Save the updated loan document
     await loan.save();
 
     res.status(200).json({
       success: true,
       message: "Loan request approved successfully",
-      data: loan, // Return the updated loan data
+      data: loan,
     });
   } catch (error) {
     console.error("Error while approving loan:", error);

@@ -49,7 +49,7 @@ export default function LoanUser() {
     }
 
     if (user?.isNew) {
-      setIsPasswordModalOpen(true); // Open modal if user is new
+      setIsPasswordModalOpen(true);
     }
 
     if (user?._id) {
@@ -82,7 +82,7 @@ export default function LoanUser() {
         sessionStorage.setItem("user", JSON.stringify(response?.data?.user));
         setUser(response?.data?.user);
         setIsPasswordModalOpen(false);
-        router.push("/auth"); // Redirect to login after updating the password
+        router.push("/auth");
       } else {
         toast.error("Failed to update password. Please try again.");
       }

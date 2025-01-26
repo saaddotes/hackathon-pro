@@ -13,17 +13,7 @@ interface PersonalInfo {
   phone: string;
 }
 
-interface LoanDetailsFormProps {
-  isAddingDetails: boolean;
-  setIsAddingDetails: (value: boolean) => void;
-  userId: string;
-}
-
-const LoanDetailsForm: React.FC<LoanDetailsFormProps> = ({
-  isAddingDetails,
-  setIsAddingDetails,
-  userId,
-}) => {
+function LoanDetailsForm({ isAddingDetails, setIsAddingDetails, userId }) {
   const [guarantors, setGuarantors] = useState<Guarantor[]>([
     { name: "", email: "", location: "", cnic: "" },
     { name: "", email: "", location: "", cnic: "" },
@@ -71,7 +61,7 @@ const LoanDetailsForm: React.FC<LoanDetailsFormProps> = ({
         console.error(data.message);
       } else {
         console.log("Loan request submitted:", data);
-        setIsAddingDetails(false); // Close the modal after successful submission
+        setIsAddingDetails(false);
       }
     } catch (error) {
       console.error("An error occurred. Please try again.");
@@ -161,6 +151,6 @@ const LoanDetailsForm: React.FC<LoanDetailsFormProps> = ({
       </div>
     </div>
   ) : null;
-};
+}
 
 export default LoanDetailsForm;

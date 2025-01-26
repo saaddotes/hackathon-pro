@@ -56,7 +56,7 @@ export default function AdminDashboard({
                 <td>
                   <button
                     className="btn btn-sm btn-outline"
-                    onClick={() => setModalData(request)} // Set data for modal
+                    onClick={() => setModalData(request)}
                   >
                     More Info
                   </button>

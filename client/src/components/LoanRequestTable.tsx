@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { QRCodeSVG } from "qrcode.react"; // Use QRCodeSVG for SVG-based QR codes
+import { QRCodeSVG } from "qrcode.react";
 
 interface LoanRequest {
   _id: string;
@@ -20,7 +20,6 @@ const LoanRequestTable: React.FC<LoanRequestTableProps> = ({
 }) => {
   const [tokens, setTokens] = useState<{ [key: string]: string }>({});
 
-  // Function to generate a token for a particular loan request
   const generateToken = (requestId: string) => {
     const newToken = `Token-${requestId}`;
     setTokens((prevTokens) => ({ ...prevTokens, [requestId]: newToken }));
@@ -76,7 +75,6 @@ const LoanRequestTable: React.FC<LoanRequestTableProps> = ({
                     </button>
                   )}
 
-                  {/* Generate Token and QR Code if status is "approved" */}
                   {request.status === "approved" && !tokens[request._id] && (
                     <button
                       className="btn btn-secondary btn-sm mt-2"

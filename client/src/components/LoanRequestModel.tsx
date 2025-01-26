@@ -52,26 +52,27 @@ export default function LoanRequestModal({
   };
 
   if (!modalData) return null;
-
+  console.log(modalData);
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
+      <h1>Hello test</h1>
       <div className="bg-white p-6 rounded-lg w-full max-w-md shadow-lg">
         {!isScheduling ? (
           <>
             <h2 className="text-2xl font-semibold">Loan Request Details</h2>
             <div className="mt-4 space-y-2">
               <p>
-                <strong>User:</strong> {modalData.userId}
+                <strong>User:</strong> {modalData?.userId?.cnic}
               </p>
               <p>
-                <strong>Status:</strong> {modalData.status}
+                <strong>Status:</strong> {modalData?.status}
               </p>
               <p>
                 <strong>Guarantors:</strong>{" "}
                 {modalData.guarantors.map(
                   (guarantor: { name: string }, index: string) => (
                     <span className="badge" key={index}>
-                      {guarantor.name}
+                      {guarantor?.name}
                     </span>
                   )
                 )}
@@ -85,12 +86,12 @@ export default function LoanRequestModal({
               </p>
               <p>
                 <strong>Installment:</strong>{" "}
-                {modalData?.selectedLoan?.estimatedLoan.annualInstallment}
+                {modalData?.selectedLoan?.estimatedLoan?.annualInstallment}
               </p>
             </div>
             <button
               onClick={() => {
-                if (modalData.status == "pending") {
+                if (modalData?.status == "pending") {
                   setIsScheduling(true);
                 } else {
                   setModalData(null);
