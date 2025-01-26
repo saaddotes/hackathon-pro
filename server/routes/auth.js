@@ -6,12 +6,9 @@ import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import "dotenv/config";
 import { LoanUser } from "../models/LoanUser.js";
-import postmark from "postmark";
 import { LoanRequest } from "../models/LoanRequest.js";
 
 const app = Router();
-
-const client = new postmark.ServerClient(process.env.POSTMARK_API_KEY);
 
 // app.post("/register", async (req, res) => {
 //   try {
