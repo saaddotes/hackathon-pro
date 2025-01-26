@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { QRCodeSVG } from "qrcode.react"; // Use QRCodeSVG for SVG-based QR codes
 
 interface LoanRequest {
   _id: string;
@@ -16,6 +17,14 @@ const LoanRequestTable: React.FC<LoanRequestTableProps> = ({
   loanRequests,
   onAddDetails,
 }) => {
+  const [tokens, setTokens] = useState<{ [key: string]: string }>({});
+
+  // Function to generate a token for a particular loan request
+  const generateToken = (requestId: string) => {
+    const newToken = `Token-${Math.random().toString(36).substr(2, 9)}`;
+    setTokens((prevTokens) => ({ ...prevTokens, [requestId]: newToken }));
+  };
+
   return (
     <div className="overflow-x-auto">
       <table className="table w-full text-sm table-zebra">
@@ -72,6 +81,30 @@ const LoanRequestTable: React.FC<LoanRequestTableProps> = ({
                     >
                       Add More Details
                     </button>
+                  )}
+
+                  {/* Generate Token and QR Code if status is "approved" */}
+                  {request.status === "approved" && !tokens[request._id] && (
+                    <button
+                      className="btn btn-secondary btn-sm mt-2"
+                      onClick={() => generateToken(request._id)}
+                    >
+                      Generate Token & QR Code
+                    </button>
+                  )}
+
+                  {tokens[request._id] && (
+                    <div className="mt-2">
+                      <p className="text-lg font-semibold">Generated Token:</p>
+                      <p className="text-xl text-green-600">
+                        {tokens[request._id]}
+                      </p>
+
+                      <div className="mt-4">
+                        <p className="text-lg font-semibold">QR Code:</p>
+                        <QRCodeSVG value={tokens[request._id]} size={128} />
+                      </div>
+                    </div>
                   )}
                 </td>
               </tr>
