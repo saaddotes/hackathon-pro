@@ -202,7 +202,10 @@ app.put("/user-loan", async (req, res) => {
 app.get("/loanrequests", async (req, res) => {
   try {
     // Fetch all loan requests from the LoanRequest model
-    const loanRequests = await LoanRequest.find();
+    const loanRequests = await LoanRequest.find().populate(
+      "userId",
+      "name email cnic"
+    );
 
     if (!loanRequests || loanRequests.length === 0) {
       return res.status(404).json({ message: "No loan requests found." });

@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const loanRequestSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "LoanUser", // Reference to the LoanUser model
+    ref: "loanusers", // Reference to the LoanUser model
   },
   guarantors: [
     {

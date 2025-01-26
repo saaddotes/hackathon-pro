@@ -9,6 +9,8 @@ export default function AdminDashboard({
   modalData: any;
   setModalData: React.Dispatch<React.SetStateAction<any>>;
 }) {
+  console.log(loanRequests);
+
   return (
     <div className=" min-h-screen py-10 px-5">
       <h1 className="text-3xl font-semibold text-center mb-8">
@@ -18,12 +20,12 @@ export default function AdminDashboard({
       <table className="table w-full text-sm table-zebra">
         <thead className="bg-primary text-white">
           <tr>
-            <th>Request ID</th>
+            <th>CNIC</th>
+            <th>User</th>
             <th>Category</th>
             <th>Subcategory</th>
             <th>Loan Amount</th>
             <th>Installment</th>
-            <th>Loan Period</th>
             <th>Status</th>
             <th>Actions</th>
           </tr>
@@ -32,14 +34,14 @@ export default function AdminDashboard({
           {loanRequests.length > 0 ? (
             loanRequests.map((request) => (
               <tr key={request._id} className="hover:bg-base-200">
-                <td>{request._id}</td>
+                <td>{request?.userId?.cnic}</td>
+                <td>{request?.userId?.name}</td>
                 <td>{request?.selectedLoan?.category}</td>
                 <td>{request?.selectedLoan?.subcategory}</td>
                 <td>{request?.selectedLoan?.estimatedLoan.loanAmount}</td>
                 <td>
                   {request?.selectedLoan?.estimatedLoan.annualInstallment}
                 </td>
-                <td>{request?.selectedLoan?.loanPeriod}</td>
                 <td>
                   <span
                     className={`badge ${

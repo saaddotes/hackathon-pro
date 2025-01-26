@@ -12,9 +12,6 @@ export default function LoanPopup({ category, onClose }: any) {
   const [cnic, setCnic] = useState("");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
-  const [password, setPassword] = useState(
-    Math.random().toString(36).slice(-8)
-  );
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -31,6 +28,7 @@ export default function LoanPopup({ category, onClose }: any) {
 
   const handleSubmit = async () => {
     setLoading(true);
+    const password = Math.random().toString(36).slice(-8);
     try {
       const selectedLoan = {
         category: category.name,

@@ -95,7 +95,16 @@ const LoanRequestTable: React.FC<LoanRequestTableProps> = ({
 
                       <div className="mt-4">
                         <p className="text-lg font-semibold">QR Code:</p>
-                        <QRCodeSVG value={tokens[request._id]} size={128} />
+                        <QRCodeSVG
+                          value={JSON.stringify({
+                            token: tokens[request._id],
+                            requestId: request._id,
+                            scheduleDate: request.schedule.date,
+                            scheduleTime: request.schedule.time,
+                            officeLocation: request.schedule.officeLocation,
+                          })}
+                          size={128}
+                        />
                       </div>
                     </div>
                   )}
