@@ -10,7 +10,6 @@ import toast from "react-hot-toast";
 
 export default function LoanUser() {
   const { user, setUser } = useAuth();
-  const [error, setError] = useState("");
   const [loanRequests, setLoanRequests] = useState<any[]>([]);
   const [isAddingDetails, setIsAddingDetails] = useState(false);
   const [selectedRequestId, setSelectedRequestId] = useState<string | null>(
@@ -36,10 +35,10 @@ export default function LoanUser() {
         if (data.success) {
           setLoanRequests(data.data);
         } else {
-          setError("Failed to fetch loan requests");
+          toast.error("Failed to fetch loan requests");
         }
       } catch (err) {
-        setError("An error occurred while fetching loan requests");
+        toast.error("An error occurred while fetching loan requests");
         console.error(err);
       }
     };
@@ -48,9 +47,9 @@ export default function LoanUser() {
       router.push("/auth");
     }
 
-    if (user?.isNew) {
-      setIsPasswordModalOpen(true); // Open modal if user is new
-    }
+    // if (user?.isNew) {
+    //   setIsPasswordModalOpen(true); // Open modal if user is new
+    // }
 
     if (user?._id) {
       fetchLoanRequests();
@@ -63,13 +62,15 @@ export default function LoanUser() {
       return;
     }
 
+    console.log(user);
+
     try {
       console.log(user);
       const response = await axios.put(
         process.env.NEXT_PUBLIC_BACKEND_URL + "/auth/update-password",
         {
-          email: user?.email,
-          newPassword,
+          userId: user?._id,
+          password: newPassword,
         }
       );
 

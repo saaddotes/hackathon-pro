@@ -22,7 +22,7 @@ export type User = {
 };
 
 interface AuthContextType {
-  user: User | null;
+  user: any | null;
   admin: User | null; // Add admin state
   loading: boolean;
   auth: (
