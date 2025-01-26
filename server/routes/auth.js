@@ -228,32 +228,6 @@ app.post("/approveloan", async (req, res) => {
   }
 });
 
-// app.put("/user-loan", async (req, res) => {
-//   const { userId, guarantors, personalInfo, status } = req.body;
-
-//   try {
-//     const loanRequest = await LoanRequest.findOne({ userId });
-
-//     if (!loanRequest) {
-//       return res.status(404).json({ error: "Loan request not found" });
-//     }
-
-//     // Update the loan request fields
-//     loanRequest.guarantors = guarantors || loanRequest.guarantors;
-//     loanRequest.personalInfo = personalInfo || loanRequest.personalInfo;
-//     loanRequest.status = status || loanRequest.status;
-//     loanRequest.selectedLoan = selectedLoan || loanRequest.selectedLoan;
-
-//     // Save the updated loan request to the database
-//     await loanRequest.save();
-
-//     res.status(201).json({ message: "Loan request submitted successfully" });
-//   } catch (error) {
-//     console.error("Error submitting loan request:", error);
-//     res.status(500).json({ error: "Failed to submit loan request" });
-//   }
-// });
-
 app.get("/user-loan-request", async (req, res) => {
   const { email } = req.query; // Getting the userId from query parameters
 
