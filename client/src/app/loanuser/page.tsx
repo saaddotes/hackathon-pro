@@ -31,6 +31,8 @@ export default function LoanUser() {
         );
         const data = response.data;
 
+        console.log(data);
+
         if (data.success) {
           setLoanRequests(data.data);
         } else {
@@ -96,9 +98,6 @@ export default function LoanUser() {
 
   return (
     <div>
-      <h1>User Loan Requests</h1>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
       <LoanRequestTable
         loanRequests={loanRequests}
         onAddDetails={handleAddDetailsClick}

@@ -4,36 +4,41 @@ const loanRequestSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "LoanUser", // Reference to the LoanUser model
-    required: true,
   },
   guarantors: [
     {
       name: {
         type: String,
-        required: true,
+
+        default: null,
       },
       email: {
         type: String,
-        required: true,
+
+        default: null,
       },
       location: {
         type: String,
-        required: true,
+
+        default: null,
       },
       cnic: {
         type: String,
-        required: true,
+
+        default: null,
       },
     },
   ],
   personalInfo: {
     address: {
       type: String,
-      required: true,
+
+      default: null,
     },
     phone: {
       type: String,
-      required: true,
+
+      default: null,
     },
   },
   status: {
@@ -41,13 +46,15 @@ const loanRequestSchema = new mongoose.Schema({
     enum: ["pending", "approved", "rejected"],
     default: "pending",
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now,
+  selectedLoan: {
+    category: { type: String, required: true },
+    subcategory: { type: String, required: true },
+    initialDeposit: { type: Number, required: true },
+    loanPeriod: { type: Number, required: true },
+    estimatedLoan: {
+      loanAmount: { type: Number, required: true },
+      annualInstallment: { type: Number, required: true },
+    },
   },
   // Schedule fields with default values
   schedule: {

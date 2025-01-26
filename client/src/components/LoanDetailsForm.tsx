@@ -59,11 +59,14 @@ const LoanDetailsForm: React.FC<LoanDetailsFormProps> = ({
     };
 
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/user-loan`,
+      const response = await axios.put(
+        process.env.NEXT_PUBLIC_BACKEND_URL + "/auth/user-loan",
         formData
       );
+
       const data = response.data;
+
+      console.log(data);
       if (!data.success) {
         console.error(data.message);
       } else {

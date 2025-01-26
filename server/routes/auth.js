@@ -51,6 +51,9 @@ app.post("/register", async (req, res) => {
     const newUser = new LoanUser({ name, cnic, email, password, selectedLoan });
     await newUser.save();
 
+    const newRequest = new LoanRequest({ selectedLoan, userId: newUser._id });
+    await newRequest.save();
+
     // Prepare the email content
     const emailText = `Dear ${name},\n\nYour loan application details are as follows:\n\nCategory: ${selectedLoan.category}\nSubcategory: ${selectedLoan.subcategory}\nInitial Deposit: Rs. ${selectedLoan.initialDeposit}\nLoan Period: ${selectedLoan.loanPeriod} years\nLoan Amount: Rs. ${selectedLoan.estimatedLoan.loanAmount}\nAnnual Installment: Rs. ${selectedLoan.estimatedLoan.annualInstallment}\n\nYour temporary password is: ${password}\n\nPlease log in and update your password.\n\nThank you!`;
 
@@ -91,24 +94,41 @@ app.post("/register", async (req, res) => {
   }
 });
 
-app.put("/update-password", async (req, res) => {
-  try {
-    const { email, newPassword } = req.body;
+app.put("/user-loan", async (req, res) => {
+  const { userId, guarantors, personalInfo, status, selectedLoan } = req.body;
 
-    const user = await LoanUser.findOne({ email });
-    if (!user) {
-      return res.status(404).json({ error: "User not found." });
+  try {
+    const loanRequest = await LoanRequest.findOne({ userId });
+
+    if (!loanRequest) {
+      return res
+        .status(404)
+        .json({ success: false, error: "Loan request not found" });
     }
 
-    user.password = newPassword;
-    user.isNew = false;
-    await user.save();
-    res.status(200).json({ message: "Password updated successfully!" });
-  } catch (error) {
-    console.error(error);
+    // Update the loan request fields if they are provided in the request body
+    if (guarantors) {
+      loanRequest.guarantors = guarantors; // Update guarantors if provided
+    }
+    if (personalInfo) {
+      loanRequest.personalInfo = personalInfo; // Update personalInfo if provided
+    }
+    if (status) {
+      loanRequest.status = status; // Update status if provided
+    }
+    if (selectedLoan) {
+      loanRequest.selectedLoan = selectedLoan; // Update selectedLoan if provided
+    }
+
+    // Save the updated loan request to the database
+    await loanRequest.save();
+
     res
-      .status(500)
-      .json({ error: "An error occurred while updating the password." });
+      .status(200)
+      .json({ success: true, message: "Loan request updated successfully" });
+  } catch (error) {
+    console.error("Error updating loan request:", error);
+    res.status(500).json({ error: "Failed to update loan request" });
   }
 });
 
@@ -186,22 +206,24 @@ app.post("/approveloan", async (req, res) => {
   }
 });
 
-app.post("/user-loan", async (req, res) => {
+app.put("/user-loan", async (req, res) => {
   const { userId, guarantors, personalInfo, status } = req.body;
 
-  console.log({ userId, guarantors, personalInfo, status });
-
   try {
-    // Create a new loan request
-    const newLoanRequest = new LoanRequest({
-      userId,
-      guarantors,
-      personalInfo,
-      status: status || "pending", // Default to pending if no status is provided
-    });
+    const loanRequest = await LoanRequest.findOne({ userId });
 
-    // Save the loan request to the database
-    await newLoanRequest.save();
+    if (!loanRequest) {
+      return res.status(404).json({ error: "Loan request not found" });
+    }
+
+    // Update the loan request fields
+    loanRequest.guarantors = guarantors || loanRequest.guarantors;
+    loanRequest.personalInfo = personalInfo || loanRequest.personalInfo;
+    loanRequest.status = status || loanRequest.status;
+    loanRequest.selectedLoan = selectedLoan || loanRequest.selectedLoan;
+
+    // Save the updated loan request to the database
+    await loanRequest.save();
 
     res.status(201).json({ message: "Loan request submitted successfully" });
   } catch (error) {
@@ -219,13 +241,13 @@ app.get("/user-loan-request", async (req, res) => {
 
     if (!loanRequests || loanRequests.length === 0) {
       return res.status(404).json({
-        success: true,
+        success: false,
         message: "No loan requests found for this user.",
       });
     }
 
     res.status(200).json({
-      success: false,
+      success: true,
       message: "Loan requests fetched successfully",
       data: loanRequests,
     });
