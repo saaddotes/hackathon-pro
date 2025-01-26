@@ -84,7 +84,7 @@ const LoanDetailsForm: React.FC<LoanDetailsFormProps> = ({
       <div className="modal-box w-11/12 max-w-3xl">
         <h2 className="text-xl font-bold mb-4">Add More Details</h2>
         <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
-          <h3 className="text-lg font-bold mb-2">Guarantors' Details</h3>
+          <h3 className="text-lg font-bold mb-2">Guarantors Details</h3>
           {guarantors.map((guarantor, index) => (
             <div key={index} className="space-y-2 mb-4">
               <h4 className="font-semibold">Guarantor {index + 1}</h4>

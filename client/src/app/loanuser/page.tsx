@@ -12,9 +12,6 @@ export default function LoanUser() {
   const { user, setUser } = useAuth();
   const [loanRequests, setLoanRequests] = useState<any[]>([]);
   const [isAddingDetails, setIsAddingDetails] = useState(false);
-  const [selectedRequestId, setSelectedRequestId] = useState<string | null>(
-    null
-  );
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const router = useRouter();
@@ -91,8 +88,8 @@ export default function LoanUser() {
   };
 
   const handleAddDetailsClick = (requestId: string) => {
-    setSelectedRequestId(requestId);
     setIsAddingDetails(true);
+    console.log(requestId);
   };
 
   if (!user) return <h1>Loading...</h1>;

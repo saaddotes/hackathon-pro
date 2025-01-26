@@ -43,7 +43,7 @@ export default function Admin() {
           );
           setLoanRequests(response.data.data);
         } catch (error) {
-          setError("Failed to fetch loan requests. Please try again.");
+          setError("Failed to fetch loan requests. Please try again." + error);
         } finally {
           setLoadingRequests(false);
         }

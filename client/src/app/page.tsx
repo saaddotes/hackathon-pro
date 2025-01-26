@@ -3,40 +3,49 @@
 import React, { useState } from "react";
 import LoanPopup from "@/components/LoanPopup";
 
-export const loanCategories = [
-  {
-    name: "Wedding Loans",
-    subcategories: ["Valima", "Furniture", "Valima Food", "Jahez"],
-    maxLoan: 500000,
-    loanPeriod: 3,
-  },
-  {
-    name: "Home Construction Loans",
-    subcategories: ["Structure", "Finishing", "Loan"],
-    maxLoan: 1000000,
-    loanPeriod: 5,
-  },
-  {
-    name: "Business Startup Loans",
-    subcategories: [
-      "Buy Stall",
-      "Advance Rent for Shop",
-      "Shop Assets",
-      "Shop Machinery",
-    ],
-    maxLoan: 1000000,
-    loanPeriod: 5,
-  },
-  {
-    name: "Education Loans",
-    subcategories: ["University Fees", "Child Fees Loan"],
-    maxLoan: "Based on requirement",
-    loanPeriod: 4,
-  },
-];
+type LoanCategory = {
+  name: string;
+  subcategories: string[];
+  maxLoan: number | string;
+  loanPeriod: number;
+};
 
 export default function MainCategories() {
-  const [activeCategory, setActiveCategory] = useState<any>(null);
+  const [activeCategory, setActiveCategory] = useState<LoanCategory | null>(
+    null
+  );
+
+  const loanCategories: LoanCategory[] = [
+    {
+      name: "Wedding Loans",
+      subcategories: ["Valima", "Furniture", "Valima Food", "Jahez"],
+      maxLoan: 500000,
+      loanPeriod: 3,
+    },
+    {
+      name: "Home Construction Loans",
+      subcategories: ["Structure", "Finishing", "Loan"],
+      maxLoan: 1000000,
+      loanPeriod: 5,
+    },
+    {
+      name: "Business Startup Loans",
+      subcategories: [
+        "Buy Stall",
+        "Advance Rent for Shop",
+        "Shop Assets",
+        "Shop Machinery",
+      ],
+      maxLoan: 1000000,
+      loanPeriod: 5,
+    },
+    {
+      name: "Education Loans",
+      subcategories: ["University Fees", "Child Fees Loan"],
+      maxLoan: "Based on requirement",
+      loanPeriod: 4,
+    },
+  ];
 
   return (
     <div className="p-6 space-y-6">
