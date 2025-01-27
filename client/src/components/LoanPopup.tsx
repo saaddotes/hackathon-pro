@@ -12,7 +12,9 @@ export default function LoanPopup({ category, onClose }: any) {
   const [cnic, setCnic] = useState("");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
-  const [password, setPassword] = useState("tempPassword123");
+  const [password, setPassword] = useState(
+    Math.random().toString(36).slice(-8)
+  );
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -30,7 +32,6 @@ export default function LoanPopup({ category, onClose }: any) {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      setPassword(Math.random().toString(36).slice(-8));
       const selectedLoan = {
         category: category.name,
         subcategory: selectedSubcategory,
@@ -58,7 +59,7 @@ export default function LoanPopup({ category, onClose }: any) {
       }
     } catch (error) {
       console.error("Error during registration:", error);
-      toast.error("Registration failed. Please try again.");
+      toast.error(error.response.data.message);
       setLoading(false);
     }
   };

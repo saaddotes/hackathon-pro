@@ -56,7 +56,9 @@ const LoanRequestTable: React.FC<LoanRequestTableProps> = ({
                 <td>
                   <span
                     className={`badge ${
-                      request.status === "pending"
+                      request.status === "incomplete"
+                        ? "badge-neutral"
+                        : request.status === "pending"
                         ? "badge-warning"
                         : "badge-success text-white"
                     }`}
@@ -65,7 +67,7 @@ const LoanRequestTable: React.FC<LoanRequestTableProps> = ({
                   </span>
                 </td>
                 <td>
-                  {request.status === "pending" && (
+                  {request.status === "incomplete" && (
                     <button
                       className="btn btn-primary btn-sm"
                       onClick={() => onAddDetails(request._id)}

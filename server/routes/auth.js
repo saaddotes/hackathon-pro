@@ -51,10 +51,17 @@ app.post("/register", async (req, res) => {
       .status(200)
       .json({ message: "User registered and email sent successfully!" });
   } catch (error) {
+    if (error.code === 11000) {
+      return res.status(400).json({
+        success: false,
+        message: "User with this email already exists.",
+      });
+    }
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while registering the user.",
+    });
     console.error(error);
-    res
-      .status(500)
-      .json({ error: "An error occurred while registering the user." });
   }
 });
 
