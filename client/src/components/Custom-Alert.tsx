@@ -10,7 +10,7 @@ const CustomAlert = ({
   return (
     <div
       role="alert"
-      className="alert alert-error fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center"
+      className="z-50 alert alert-error fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center"
     >
       <div className="bg-white p-6 rounded shadow-lg">
         <svg
