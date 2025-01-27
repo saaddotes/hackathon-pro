@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
-// Modal component to display loan request details
 export default function LoanRequestModal({
   modalData,
   setModalData,
@@ -15,15 +15,13 @@ export default function LoanRequestModal({
     officeLocation: "",
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [isScheduling, setIsScheduling] = useState(false);
 
   const handleApproveLoan = async () => {
     setLoading(true);
-    setError(null);
 
     if (!schedule.date || !schedule.time || !schedule.officeLocation) {
-      setError("Please fill in all schedule details.");
+      toast.error("Please fill in all schedule details.");
       setLoading(false);
       return;
     }
@@ -42,10 +40,10 @@ export default function LoanRequestModal({
       if (response.data.success) {
         setModalData(null);
       } else {
-        setError(response.data.message || "Failed to approve the loan.");
+        toast.error(response.data.message || "Failed to approve the loan.");
       }
     } catch (error: any) {
-      setError(
+      toast.error(
         error?.response?.data?.message || "An error occurred. Please try again."
       );
     } finally {

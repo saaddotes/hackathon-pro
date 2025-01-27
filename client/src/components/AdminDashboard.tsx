@@ -1,18 +1,14 @@
-import { motion } from "framer-motion";
 import LoanRequestModal from "@/components/LoanRequestModel";
 
 export default function AdminDashboard({
   loanRequests,
-  loadingRequests,
   setModalData,
   modalData,
 }: {
   loanRequests: any[];
-  loadingRequests: boolean;
   modalData: any;
   setModalData: React.Dispatch<React.SetStateAction<any>>;
 }) {
-  console.log("req => ", loanRequests);
   return (
     <div className=" min-h-screen py-10 px-5">
       <h1 className="text-3xl font-semibold text-center mb-8">
