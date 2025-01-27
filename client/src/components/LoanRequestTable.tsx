@@ -6,6 +6,7 @@ interface LoanRequest {
   schedule: { date: string; time: string; officeLocation: string };
   guarantors: { name: string; email: string; cnic: string }[];
   status: string;
+  selectedLoan: any;
 }
 
 interface LoanRequestTableProps {
@@ -21,7 +22,7 @@ const LoanRequestTable: React.FC<LoanRequestTableProps> = ({
 
   // Function to generate a token for a particular loan request
   const generateToken = (requestId: string) => {
-    const newToken = `Token-${Math.random().toString(36).substr(2, 9)}`;
+    const newToken = `Token-${requestId}`;
     setTokens((prevTokens) => ({ ...prevTokens, [requestId]: newToken }));
   };
 
@@ -30,12 +31,12 @@ const LoanRequestTable: React.FC<LoanRequestTableProps> = ({
       <table className="table w-full text-sm table-zebra">
         <thead className="bg-primary text-white">
           <tr>
-            <th>Schedule Date</th>
-            <th>Schedule Time</th>
-            <th>Office Location</th>
-            <th>Guarantor Names</th>
-            <th>Guarantor Emails</th>
-            <th>Guarantor CNIC</th>
+            <th>Loan Request</th>
+            <th>Category</th>
+            <th>Subcategory</th>
+            <th>Loan Amount</th>
+            <th>Installment</th>
+            <th>Loan Period</th>
             <th>Status</th>
             <th>Actions</th>
           </tr>
@@ -44,30 +45,20 @@ const LoanRequestTable: React.FC<LoanRequestTableProps> = ({
           {loanRequests.length > 0 ? (
             loanRequests.map((request) => (
               <tr key={request._id} className="hover:bg-base-200">
-                <td>{new Date(request.schedule.date).toLocaleDateString()}</td>
-                <td>{request.schedule.time}</td>
-                <td>{request.schedule.officeLocation}</td>
+                <td>{request._id}</td>
+                <td>{request?.selectedLoan?.category}</td>
+                <td>{request?.selectedLoan?.subcategory}</td>
+                <td>{request?.selectedLoan?.estimatedLoan.loanAmount}</td>
                 <td>
-                  {request.guarantors.map((guarantor, idx) => (
-                    <div key={idx}>{guarantor.name}</div>
-                  ))}
+                  {request?.selectedLoan?.estimatedLoan.annualInstallment}
                 </td>
-                <td>
-                  {request.guarantors.map((guarantor, idx) => (
-                    <div key={idx}>{guarantor.email}</div>
-                  ))}
-                </td>
-                <td>
-                  {request.guarantors.map((guarantor, idx) => (
-                    <div key={idx}>{guarantor.cnic}</div>
-                  ))}
-                </td>
+                <td>{request?.selectedLoan?.loanPeriod}</td>
                 <td>
                   <span
                     className={`badge ${
                       request.status === "pending"
                         ? "badge-warning"
-                        : "badge-success"
+                        : "badge-success text-white"
                     }`}
                   >
                     {request.status}

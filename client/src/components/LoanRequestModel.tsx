@@ -79,27 +79,40 @@ export default function LoanRequestModal({
                 )}
               </p>
               <p>
-                <strong>Amount:</strong> {modalData.amount}
+                <strong>Amount:</strong>{" "}
+                {modalData?.selectedLoan?.estimatedLoan.loanAmount}
               </p>
               <p>
-                <strong>Repayment Period:</strong> {modalData.repaymentPeriod}
+                <strong>Period:</strong> {modalData?.selectedLoan?.loanPeriod}
               </p>
               <p>
-                <strong>Purpose:</strong> {modalData.purpose}
+                <strong>Installment:</strong>{" "}
+                {modalData?.selectedLoan?.estimatedLoan.annualInstallment}
               </p>
             </div>
             <button
-              onClick={() => setIsScheduling(true)}
+              onClick={() => {
+                if (modalData.status == "pending") {
+                  setIsScheduling(true);
+                } else {
+                  setModalData(null);
+                }
+              }}
               className="btn btn-primary mt-4 w-full"
             >
-              Proceed Further
+              {modalData.status == "pending" ? "Proceed Further" : "close"}
             </button>
           </>
         ) : (
           <>
             <h3 className="text-xl font-semibold">Schedule Loan</h3>
-            {error && <p className="text-red-500 mt-2">{error}</p>}
-            <div className="mt-4 space-y-4">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleApproveLoan();
+              }}
+              className="mt-4 space-y-4"
+            >
               <div>
                 <label className="block text-sm font-medium">Date</label>
                 <input
@@ -138,23 +151,23 @@ export default function LoanRequestModal({
                   required
                 />
               </div>
-            </div>
-
-            <div className="mt-4 flex justify-between">
-              <button
-                onClick={handleApproveLoan}
-                disabled={loading}
-                className="btn btn-success w-1/2"
-              >
-                {loading ? "Approving..." : "Approve Loan"}
-              </button>
-              <button
-                onClick={() => setModalData(null)}
-                className="btn btn-secondary w-1/2 ml-2"
-              >
-                Close
-              </button>
-            </div>
+              <div className="mt-4 flex justify-between">
+                <button
+                  type="button"
+                  onClick={() => setModalData(null)}
+                  className="btn w-1/2 ml-2"
+                >
+                  Close
+                </button>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="btn btn-primary w-1/2"
+                >
+                  {loading ? "Approving..." : "Approve Loan"}
+                </button>
+              </div>
+            </form>
           </>
         )}
       </div>
