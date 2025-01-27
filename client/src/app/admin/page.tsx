@@ -5,9 +5,10 @@ import { useAuth } from "@/context/auth-context";
 import axios from "axios";
 import AdminLoginForm from "@/components/AdminLoginForm";
 import AdminDashboard from "@/components/AdminDashboard";
+import { useRouter } from "next/navigation";
 
 export default function Admin() {
-  const { admin, adminAuth, loading } = useAuth();
+  const { admin, adminAuth, loading, user } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -33,6 +34,7 @@ export default function Admin() {
     }
   };
 
+  const router = useRouter();
   useEffect(() => {
     if (admin) {
       const fetchLoanRequests = async () => {
@@ -51,25 +53,22 @@ export default function Admin() {
 
       fetchLoanRequests();
     }
+
+    if (!user || !admin) {
+      router.push("/auth");
+    }
   }, [admin]);
 
-  if (loading) {
+  if (!user || !admin) {
     return <div>Loading...</div>;
   }
 
-  return admin ? (
+  return (
     <AdminDashboard
       loanRequests={loanRequests}
       loadingRequests={loadingRequests}
       setModalData={setModalData}
       modalData={modalData}
-    />
-  ) : (
-    <AdminLoginForm
-      handleLogin={handleLogin}
-      error={error}
-      setEmail={setEmail}
-      setPassword={setPassword}
     />
   );
 }

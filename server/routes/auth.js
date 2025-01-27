@@ -98,21 +98,23 @@ app.put("/update-password", async (req, res) => {
   try {
     const { userId, password } = req.body;
 
-    const result = await LoanUser.findByIdAndUpdate(userId, {
-      password: password,
-      isNew: false,
-    });
+    const result = await LoanUser.findByIdAndUpdate(
+      userId,
+      {
+        password: password,
+        isNew: false,
+      },
+      { new: true }
+    );
 
     console.log(result);
 
     if (result) {
-      res
-        .status(200)
-        .json({
-          success: true,
-          message: "Password updated successfully",
-          user: result,
-        });
+      res.status(200).json({
+        success: true,
+        message: "Password updated successfully",
+        user: result,
+      });
     } else {
       res.status(400).json({ success: false, message: "User not found" });
     }
@@ -251,8 +253,10 @@ app.post("/approveloan", async (req, res) => {
 app.post("/login", checkCredentials, async (req, res) => {
   const { email, password } = req.body;
 
+  console.log(email);
   try {
     const user = await User.findOne({ email });
+    console.log(user);
     if (!user) {
       return res
         .status(400)

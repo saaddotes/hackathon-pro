@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 export default function LoanUser() {
-  const { user, setUser } = useAuth();
+  const { user, setUser, admin } = useAuth();
   const [loanRequests, setLoanRequests] = useState<any[]>([]);
   const [isAddingDetails, setIsAddingDetails] = useState(false);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
@@ -39,6 +39,10 @@ export default function LoanUser() {
         console.error(err);
       }
     };
+
+    if (admin) {
+      router.push("/auth");
+    }
 
     if (!user) {
       router.push("/auth");

@@ -56,7 +56,6 @@ const loanRequestSchema = new mongoose.Schema({
       annualInstallment: { type: Number, required: true },
     },
   },
-  // Schedule fields with default values
   schedule: {
     date: {
       type: Date,

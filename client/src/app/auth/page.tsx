@@ -6,7 +6,7 @@ import { FormEvent, useEffect, useState } from "react";
 
 export default function Auth() {
   const [loading, setLoading] = useState(true);
-  const { auth, user, adminAuth } = useAuth();
+  const { auth, user, adminAuth, admin } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -15,7 +15,9 @@ export default function Auth() {
   const router = useRouter();
 
   useEffect(() => {
-    if (user) {
+    if (user && admin) {
+      router.push("/admin");
+    } else if (user) {
       router.push("/loanuser");
     } else {
       setLoading(false);
