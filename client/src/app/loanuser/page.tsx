@@ -23,7 +23,7 @@ export default function LoanUser() {
           process.env.NEXT_PUBLIC_BACKEND_URL +
             "/auth/user-loan-request" +
             "?userId=" +
-            user?.email
+            user?._id
         );
         const data = response.data;
 
@@ -44,9 +44,9 @@ export default function LoanUser() {
       router.push("/auth");
     }
 
-    // if (user?.isNew) {
-    //   setIsPasswordModalOpen(true); // Open modal if user is new
-    // }
+    if (user?.isNew) {
+      setIsPasswordModalOpen(true); // Open modal if user is new
+    }
 
     if (user?._id) {
       fetchLoanRequests();
@@ -75,7 +75,8 @@ export default function LoanUser() {
 
       if (response.status == 200) {
         toast.success("Password updated successfully. Please log in again.");
-        setUser({ ...user, isNew: false });
+        sessionStorage.setItem("user", JSON.stringify(response?.data?.user));
+        setUser(response?.data?.user);
         setIsPasswordModalOpen(false);
         router.push("/auth"); // Redirect to login after updating the password
       } else {
